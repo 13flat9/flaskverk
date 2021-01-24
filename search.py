@@ -4,6 +4,11 @@ import re
 from datetime import datetime
 from dateutil.parser import isoparse
 import pytz
+import locale
+
+#bæta einhvern tímann við stillingu fyrir þetta?
+locale.setlocale(locale.LC_ALL, 'de_DE')
+
 
 class Performance:
 
@@ -16,7 +21,7 @@ class Performance:
         
     def __str__(self):
         #ATH. skoða Locale modulinn fyrir þýsku
-        return f"{self.title} von {self.composer}. " + datetime.strftime(self.datetime, "Am %x, um %X. ") + self.venue
+        return f"{self.title} von {self.composer}. " + datetime.strftime(self.datetime, "%A, %d. %B, %H:%M. ") + self.venue
 
     def get_datetime(self):
         return self.datetime
@@ -40,8 +45,9 @@ class Artist:
         return f"{self.name}. Number of found performances: {len(self.performances)}\n" + "\n".join(performanceStrings)       
 
 
-
+# vantar að sækja hlekkinn á sýninguna 
 def staatsoper_search(person):
+
 
     page = requests.get("https://www.wiener-staatsoper.at/suche/spezielle-suche/?tx_gdstop_search[location]=spielplan&tx_gdstop_search[sword]=" + person)
     soup = BS(page.content, 'html.parser')
@@ -56,8 +62,6 @@ def staatsoper_search(person):
 
     # gets performance metadata 
     for div in operas:    
-        get = False
-        
         metadata = div.find('div', class_ = "metadata")
         
         if not metadata:
