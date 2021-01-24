@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>replace</title>
+        {% if title %}
+        <title> sitename - {{ title }} </title>
+        {% else %}
+        <title> sitename </title>
+        {% endif %}
     </head>
     <body>
         {% block content %}

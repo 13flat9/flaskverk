@@ -15,7 +15,10 @@ class Performance:
     def __init__(self, datetime, title, composer, venue):
         self.datetime = datetime
         self.title = title
+        if composer == None:
+            self.composer = "missing"
         self.composer = composer
+
         self.venue = venue
 
         
@@ -37,7 +40,7 @@ class Artist:
     def __init__(self, name):
         '''name: string, performances: list of Performance objects'''
         self.name = name
-        self.performances = staatsoper_search(name)
+        self.performances = self.staatsoper_search()
 
 
     def __str__(self):
@@ -45,43 +48,44 @@ class Artist:
         return f"{self.name}. Number of found performances: {len(self.performances)}\n" + "\n".join(performanceStrings)       
 
 
-# vantar að sækja hlekkinn á sýninguna 
-def staatsoper_search(person):
+    # vantar að sækja hlekkinn á sýninguna 
+    # sækir bara óperur, ekki tónleika
+    def staatsoper_search(self):
 
+        page = requests.get("https://www.wiener-staatsoper.at/suche/spezielle-suche/?tx_gdstop_search[location]=spielplan&tx_gdstop_search[sword]=" + self.name)
+        soup = BS(page.content, 'html.parser')
 
-    page = requests.get("https://www.wiener-staatsoper.at/suche/spezielle-suche/?tx_gdstop_search[location]=spielplan&tx_gdstop_search[sword]=" + person)
-    soup = BS(page.content, 'html.parser')
+        calendar = soup.find('div', class_="calendar-list load-culturall")
+        if not calendar: 
+            return None
 
-    calendar = soup.find('div', class_="calendar-list load-culturall")
-    operas = calendar.find_all('div', class_=re.compile('oper$'))
-    
-    if not operas:
-        return None
+        operas = calendar.find_all('div', class_=re.compile('oper$'))
+        if not operas:
+            return None
 
-    performances = []
+        performances = []
 
-    # gets performance metadata 
-    for div in operas:    
-        metadata = div.find('div', class_ = "metadata")
-        
-        if not metadata:
-            continue
+        # gets performance metadata 
+        for div in operas:
+            metadata = div.find('div', class_ = "metadata")
+            
+            if not metadata:
+                continue
 
-        date = metadata.find('span', itemprop='startDate')
-        date = str(date.string)
-        #breytir í datetime hlut
-        date = isoparse(date)
+            date = metadata.find('span', itemprop='startDate')
+            date = str(date.string)
+            #breytir í datetime hlut
+            date = isoparse(date)
 
-        title = metadata.find('span', itemprop='name', recursive = False)
-        title = str(title.string)
+            title = metadata.find('span', itemprop='name', recursive = False)
+            title = str(title.string)
 
-        composer = metadata.find('span', itemprop='performer')
-        composerName = composer.find('span', itemprop='name')
-        composerName = str(composerName.string)
+            composer = metadata.find('span', itemprop='performer')
+            if composer:        
+                composerName = composer.find('span', itemprop='name')
+                composerName = str(composerName.string)
 
-        # breytir í performance hlut
-        performances.append(Performance(date, title, composerName, "Wiener Staatsoper"))
+            # breytir í performance hlut
+            performances.append(Performance(date, title, composerName, "Wiener Staatsoper"))
 
-    return performances
-
-print(Artist("Rachvelishvili"))
+        return performances

@@ -1,7 +1,29 @@
-{% extends layout.html %}
+{% extends "layout.html" %}
 
 {% block content %}
+    <form action="" method="get" novalidate>
+        <div>
+            {{form.search_query.label}}
+            {{form.search_query}}
+        </div>
+    </form>
 
-    form 
-
+    {% if artist %}
+        {% if artist.performances %}
+            <h1>
+                Search results for {{ artist.name }}:
+            </h1>
+                <ul>
+                {% for performance in artist.performances %}    
+                    <li>
+                        {{ performance.__str__() }}
+                    </li>
+                {% endfor %}
+                </ul>
+        {% else %}
+            <p>
+                There were no search results for <em> {{ artist.name }} </em>.
+            </p>
+        {% endif %}
+    {% endif %}
 {% endblock %}

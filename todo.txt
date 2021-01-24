@@ -2,5 +2,8 @@ WTForms
 
 CSRF token
 
+Bootstrap
+
+
 seinna:
 skipta tungumáli
