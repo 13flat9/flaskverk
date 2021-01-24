@@ -1,0 +1,6 @@
+WTForms
+
+CSRF token
+
+seinna:
+skipta tungumáli
