@@ -3,8 +3,7 @@
 {% block content %}
     <form action="" method="get" novalidate>
         <div>
-            {{form.search_query.label}}
-            {{form.search_query}}
+            {{form.search_query(placeholder="Search")}}
         </div>
     </form>
 
@@ -16,7 +15,7 @@
                 <ul>
                 {% for performance in artist.performances %}    
                     <li>
-                        {{ performance.__str__() }}
+                        <a href="{{performance.event_link}}">{{ performance.__str__() }}</a>
                     </li>
                 {% endfor %}
                 </ul>

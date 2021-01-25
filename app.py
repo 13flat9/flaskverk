@@ -25,6 +25,5 @@ def search():
     search_query = request.args.get('search_query')
     if search_query:
         artist = Artist(search_query)
-
     form = Search()
     return render_template("search.html", form=form, title="Search", artist=artist)

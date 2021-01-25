@@ -12,13 +12,13 @@ locale.setlocale(locale.LC_ALL, 'de_DE')
 
 class Performance:
 
-    def __init__(self, datetime, title, composer, venue):
+    def __init__(self, datetime, title, composer, venue, event_link):
         self.datetime = datetime
         self.title = title
         if composer == None:
             self.composer = "missing"
         self.composer = composer
-
+        self.event_link = "https://www.wiener-staatsoper.at" + event_link
         self.venue = venue
 
         
@@ -85,7 +85,15 @@ class Artist:
                 composerName = composer.find('span', itemprop='name')
                 composerName = str(composerName.string)
 
+            location = metadata.find('span', itemprop='location', recursive = False)
+            location = location.find('span', itemprop='name', recursive = False)
+            location = str(location.string)
+
+            event_title = div.find('h2', class_='event-title')
+            event_link = event_title.find('a')
+            event_link = event_link['href']
+
             # breytir í performance hlut
-            performances.append(Performance(date, title, composerName, "Wiener Staatsoper"))
+            performances.append(Performance(date, title, composerName, location, event_link))
 
         return performances
