@@ -23,6 +23,7 @@ def about():
 @app.route("/search")
 def search():
     search_query = request.args.get('search_query')
+    artist = None
     if search_query:
         artist = Artist(search_query)
     form = Search()

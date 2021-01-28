@@ -1,28 +1,32 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <form action="" method="get" novalidate>
-        <div>
+    <form  action="" method="get" novalidate>
+        <div class="m-3">
             {{form.search_query(placeholder="Search")}}
+            <input type="submit" value="Submit">
         </div>
     </form>
 
     {% if artist %}
-        {% if artist.performances %}
-            <h1>
-                Search results for {{ artist.name }}:
-            </h1>
-                <ul>
-                {% for performance in artist.performances %}    
-                    <li>
-                        <a href="{{performance.event_link}}">{{ performance.__str__() }}</a>
-                    </li>
-                {% endfor %}
+        <div class="container-fluid">
+            {% if artist.performances %}
+                <h3>
+                    Search results for <strong>{{ artist.name }}</strong>:
+                </h3>
+                <ul class="list-group">
+                    {% for performance in artist.performances %}    
+                        <li class="list-group-item">
+                            <!-- breyta úr string method í að taka hverja breytu fyrir sig, bæta svo formatting -->
+                            <a href="{{performance.event_link}}">{{ performance.__str__() }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
-        {% else %}
-            <p>
-                There were no search results for <em> {{ artist.name }} </em>.
-            </p>
-        {% endif %}
+            {% else %}
+                <p>
+                    There were no search results for <em>{{ artist.name }}</em>.
+                </p>
+            {% endif %}
+        </div>
     {% endif %}
 {% endblock %}

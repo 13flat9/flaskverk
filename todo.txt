@@ -1,9 +1,10 @@
-WTForms
+x WTForms
 
-CSRF token
+x CSRF token
+
+Bæta við fleiri venues. Búa til leitarfall sem tekur venue sem argument?
 
 Bootstrap
 
-
 seinna:
-skipta tungumáli
+skipta um tungumál
