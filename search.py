@@ -47,8 +47,6 @@ class Artist:
         performanceStrings = [performance.__str__() for performance in self.performances] 
         return f"{self.name}. Number of found performances: {len(self.performances)}\n" + "\n".join(performanceStrings)       
 
-
-    # vantar að sækja hlekkinn á sýninguna 
     # sækir bara óperur, ekki tónleika
     def staatsoper_search(self):
 
@@ -97,3 +95,10 @@ class Artist:
             performances.append(Performance(date, title, composerName, location, event_link))
 
         return performances
+
+
+def tadwsearch(person):
+    def search_performance(pageURL):
+        page = requests.get(pageURL)
+        soup = BS(page.content, 'html.parser')
+        
